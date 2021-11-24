@@ -1,0 +1,36 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+    {#<h1 class="title">#}
+    {#  Flask Login Example#}
+    {#</h1>#}
+    {#<h2 class="subtitle">#}
+    {#  Easy authentication and authorization in Flask.#}
+    {#</h2>#}
+
+    <h1>View data</h1>
+    <p>unique_id: {{ unique_id }}</p>
+    <p>unique_account_ids: {{ unique_account_ids }}</p>
+    <p>unique_account_id: {{ unique_account_ids[0] }}</p>
+    <p>Input the start and end date.</p>
+    <form action="/data" method="GET">
+        {#       <input type="hidden" name="unique_id" value="https://porter-stout.herokuapp.com/stout/redirect" />#}
+        {#       TODO: actually select unique_account_id rather than index 0#}
+        <input name="unique_account_id" type="hidden" value="{{ unique_account_ids[0] }}">
+        <input name="start_date" placeholder="Start date">
+        <input name="end_date" placeholder="End date">
+        <!-- <div>
+          <label for="say">What greeting do you want to say?</label>
+          <input name="say" id="say" value="Hi">
+        </div>
+        <div>
+          <label for="to">Who do you want to say it to?</label>
+          <input name="to" id="to" value="Mom">
+        </div> -->
+        <div>
+            <button>Get data</button>
+        </div>
+    </form>
+{% endblock %}
