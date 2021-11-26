@@ -18,6 +18,7 @@
     <form action="/data" method="GET">
         {#       <input type="hidden" name="unique_id" value="https://porter-stout.herokuapp.com/stout/redirect" />#}
         {#       TODO: actually select unique_account_id rather than index 0#}
+        <input name="unique_id" type="hidden" value="{{ unique_id }}">
         <input name="unique_account_id" type="hidden" value="{{ unique_account_ids[0] }}">
         <input name="access_token" type="hidden" value="{{ access_token }}">
         <input name="start_date" placeholder="Start date">
@@ -33,5 +34,9 @@
         <div>
             <button>Get data</button>
         </div>
+        {% if interval_data %}
+            {{ interval_data }}
+
+        {% endif %}
     </form>
 {% endblock %}

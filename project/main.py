@@ -1,6 +1,6 @@
 # main.py
 
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, session
 # from flask import Flask, abort, request, jsonify, g, url_for, redirect, render_template, flash
 
 from flask_login import login_required, current_user
@@ -21,13 +21,15 @@ BASE_64_ENCODED_STRING = 'NTAwOGQwNmEtNGU0NC0xMWVjLWFjZTMtYWNkZTQ4MDAxMTIyOmM1Nj
 def index():
     # TODO: check if we have token in db and redirect to connect utility page if we don't
 
+    print("Loading index")
     unique_id = request.args.get('unique_id')
 
     if not unique_id:
         return redirect(url_for('main.connect_utility'))
 
-    # TODO: query unique_account_ids here
-    # unique_account_ids = ['123', '456']
+    data = session.get('interval_data')
+    if data:
+        session.pop('interval_data')
 
     access_token = request.args.get('access_token')
 
@@ -35,12 +37,14 @@ def index():
 
     print(f"energy_account_ids: {energy_account_ids}")
 
-    return render_template('index.html', unique_id=unique_id, unique_account_ids=energy_account_ids, access_token=access_token)
+    return render_template('index.html', unique_id=unique_id, unique_account_ids=energy_account_ids, access_token=access_token, interval_data=data)
 
 
 @app.route('/data', methods=['GET'])
 def get_data():
     print("getting data")
+
+    unique_id = request.args.get('unique_id')
 
     account_id = request.args.get('unique_account_id')
 
@@ -69,9 +73,21 @@ def get_data():
     print(response)
     print(response.json())
 
+    # data = {
+    #     'data': response.json()
+    # }
+
+    session['interval_data'] = response.text
+
+    # return get(url=url_for('main.index'), data=data)
+
+    redirect_url = f'{url_for("main.index")}?unique_id={unique_id}&access_token={access_token}'
+
+    return redirect(redirect_url)
+
     # return render_template('home.html', unique_id=unique_id, unique_account_ids=unique_account_ids)
 
-    return response.text
+    # return response.text
 
 
 
