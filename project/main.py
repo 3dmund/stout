@@ -21,7 +21,7 @@ BASE_64_ENCODED_STRING = 'NTAwOGQwNmEtNGU0NC0xMWVjLWFjZTMtYWNkZTQ4MDAxMTIyOmM1Nj
 def index():
     # TODO: check if we have token in db and redirect to connect utility page if we don't
 
-    print("Loading index")
+    print("Loading indexs")
     unique_id = request.args.get('unique_id')
 
     if not unique_id:
