@@ -209,15 +209,15 @@ def get_access_token(code):
     )
     # encoded_string = base64.b64encode(string.encode())
 
-    encoded_string = HTTPBasicAuth(app.config.get('PELM_CLIENT_ID'), app.config.get('PELM_CLIENT_SECRET'))
+    auth = HTTPBasicAuth(app.config.get('PELM_CLIENT_ID'), app.config.get('PELM_CLIENT_SECRET'))
 
-    print(encoded_string)
+    # print(encoded_string)
+    #
+    # headers = {
+    #     'Authorization': f'Basic {encoded_string}'
+    # }
 
-    headers = {
-        'Authorization': f'Basic {encoded_string}'
-    }
-
-    response = post(url, data=data, headers=headers)
+    response = post(url, data=data, auth=auth)
 
     print(response)
 
