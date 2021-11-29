@@ -13,10 +13,10 @@ class Config(object):
     PGE_API_URL = "https://api.pge.com"
     PGE_SHAREMYDATA_API_URL = "https://sharemydata.pge.com"
     PELM_API_URL = "https://api.portertech.io"
-    STOUT_URL = "https://porter-stout.herokuapp.com"
+    STOUT_URL = "https://pelm-stout.herokuapp.com"
     PORTER_AUTH_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzY3NDkwOTcsImlhdCI6MTYzNjY2MjY5Nywic3ViIjo5fQ.XYb1Wzw81a9BTKOrDkV3UAM97giTQmznHzToCaKaug8"
-    PELM_CLIENT_ID = "123"
-    PELM_CLIENT_SECRET = "456"
+    PELM_CLIENT_ID = "28cb423e-5151-11ec-b73c-2a8cf170e843"
+    PELM_CLIENT_SECRET = "63889f30dbc0bac568135f7b301051bf00e1ac2f2ea9dc75a23c4ebd1cf4e710"
 
 class ProductionConfig(Config):
     pass
