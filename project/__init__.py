@@ -48,7 +48,7 @@ app = Flask(__name__)
 app.config.from_object(os.environ.get('APP_SETTINGS'))
 
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///stout'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 
