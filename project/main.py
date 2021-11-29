@@ -209,7 +209,7 @@ def get_access_token(code):
     encoded_string = base64.b64encode(string.encode())
 
     headers = {
-        'Authorization': f'Basic {BASE_64_ENCODED_STRING}'
+        'Authorization': f'Basic {encoded_string}'
     }
 
     response = post(url, data=data, headers=headers)
