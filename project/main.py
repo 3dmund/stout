@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from flask_login import login_required, current_user
 from project import app
 from requests import post, get
+from requests.auth import HTTPBasicAuth
 
 import base64
 
@@ -206,7 +207,9 @@ def get_access_token(code):
         id = app.config.get('PELM_CLIENT_ID'),
         secret=app.config.get('PELM_CLIENT_SECRET')
     )
-    encoded_string = base64.b64encode(string.encode())
+    # encoded_string = base64.b64encode(string.encode())
+
+    encoded_string = HTTPBasicAuth(app.config.get('PELM_CLIENT_ID'), app.config.get('PELM_CLIENT_SECRET'))
 
     print(encoded_string)
 
