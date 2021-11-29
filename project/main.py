@@ -196,6 +196,7 @@ def get_access_token(code):
     )
 
     data = {
+        'grant_type': 'code',
         'code': code,
         'redirect_url': '{}/redirect'.format(app.config.get('STOUT_URL'))
     }
