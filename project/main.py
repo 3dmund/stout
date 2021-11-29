@@ -208,6 +208,8 @@ def get_access_token(code):
     )
     encoded_string = base64.b64encode(string.encode())
 
+    print(encoded_string)
+
     headers = {
         'Authorization': f'Basic {encoded_string}'
     }
