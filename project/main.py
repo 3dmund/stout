@@ -7,6 +7,8 @@ from flask_login import login_required, current_user
 from project import app
 from requests import post, get
 from requests.auth import HTTPBasicAuth
+from .models import User, Token
+from . import db
 
 import base64
 
@@ -20,32 +22,27 @@ BASE_64_ENCODED_STRING = 'NTAwOGQwNmEtNGU0NC0xMWVjLWFjZTMtYWNkZTQ4MDAxMTIyOmM1Nj
 @main.route('/')
 @login_required
 def index():
-    # TODO: check if we have token in db and redirect to connect utility page if we don't
-
     print("Loading indexs")
-    unique_id = request.args.get('unique_id')
 
-    if not unique_id:
+    pelm_user_id = current_user.pelm_user_id
+    token = current_user.token
+
+    # TODO: check if token is expired
+    if not pelm_user_id:
         return redirect(url_for('main.connect_utility'))
 
     data = session.get('interval_data')
     if data:
         session.pop('interval_data')
 
-    access_token = request.args.get('access_token')
+    energy_account_ids = get_energy_accounts(pelm_user_id, token.access_token)
 
-    energy_account_ids = get_energy_accounts(unique_id, access_token)
-
-    print(f"energy_account_ids: {energy_account_ids}")
-
-    return render_template('index.html', unique_id=unique_id, unique_account_ids=energy_account_ids, access_token=access_token, interval_data=data)
+    return render_template('index.html', pelm_user_id=pelm_user_id, unique_account_ids=energy_account_ids, interval_data=data)
 
 
 @app.route('/data', methods=['GET'])
 def get_data():
     print("getting data")
-
-    unique_id = request.args.get('unique_id')
 
     account_id = request.args.get('unique_account_id')
 
@@ -54,7 +51,7 @@ def get_data():
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
 
-    access_token = request.args.get('access_token')
+    access_token = current_user.token.access_token
 
     url = '{PELM_API_URL}/intervals/get?account_id={account_id}&start_date={start_date}&end_date={end_date}'.format(
         PELM_API_URL=app.config.get('PELM_API_URL'),
@@ -67,30 +64,10 @@ def get_data():
         'Authorization': 'Bearer {}'.format(access_token)
     }
 
-    print(url)
-
     response = get(url=url, headers=headers)
-
-    print(response)
-    print(response.json())
-
-    # data = {
-    #     'data': response.json()
-    # }
-
     session['interval_data'] = response.text
 
-    # return get(url=url_for('main.index'), data=data)
-
-    redirect_url = f'{url_for("main.index")}?unique_id={unique_id}&access_token={access_token}'
-
-    return redirect(redirect_url)
-
-    # return render_template('home.html', unique_id=unique_id, unique_account_ids=unique_account_ids)
-
-    # return response.text
-
-
+    return redirect(url_for('main.index'))
 
 
 @main.route('/profile')
@@ -109,18 +86,6 @@ def connect_utility_post():
     url = "{host}/auth/authorize".format(host=app.config.get('PELM_API_URL'))
     print(url)
 
-    # headers = {
-    # 	'Authorization': 'Basic {}'.format(get_pelm_auth_token())
-    # }
-    #
-    # response = post(url=url, headers=headers)
-    # print(response)
-    # print(type(response))
-    # # print(response.get_data)
-
-    # token = get_pelm_auth_token()
-    # print(f"token: {token}")
-
     url_with_params = "{url}?client_id={client_id}".format(
         url=url,
         client_id=app.config.get('PELM_CLIENT_ID')
@@ -137,16 +102,19 @@ def pelm_redirect():
     print(f"unique_id: {unique_id}")
 
     # TODO: we're passing this along for now. Should save to db.
-    access_token = get_access_token(code)
+    access_token, refresh_token = exchange_authorization_code_for_access_token(code)
     print(access_token)
+
+    current_user.set_pelm_user_id(unique_id)
+    new_token = Token(user_id=current_user.id, access_token=access_token, refresh_token=refresh_token)
+    db.session.add(new_token)
+    db.session.commit()
 
     redirect_url = '{url}?unique_id={unique_id}&access_token={access_token}'.format(
         url=url_for('main.index'),
         unique_id=unique_id,
         access_token=access_token
     )
-
-    # return unique_id
 
     return redirect(redirect_url)
 
@@ -190,7 +158,7 @@ def get_energy_accounts(unique_id, access_token):
 
     return response.json()['data']
 
-def get_access_token(code):
+def exchange_authorization_code_for_access_token(code):
     print("getting access_token")
     url = '{PELM_API_URL}/auth/token'.format(
         PELM_API_URL=app.config.get('PELM_API_URL')
@@ -231,6 +199,7 @@ def get_access_token(code):
     print(access_token)
     print(refresh_token)
 
-    return access_token
+    return access_token, refresh_token
 
+# def exchange_refresh_token_for_access_token(refresh_token):
 
