@@ -3,4 +3,3 @@ venv
 .idea/workspace.xml
 *.pyc
 .DS_Store
-.env

@@ -8,6 +8,7 @@ from project import app
 from .models import User, Token
 from . import db
 from project.helpers import pelm_helpers
+from requests import post, get
 
 main = Blueprint('main', __name__)
 
