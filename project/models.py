@@ -29,12 +29,16 @@ class Token(db.Model):
     access_token_expiration = db.Column(db.DateTime())
     refresh_token_expiration = db.Column(db.DateTime())
 
-    def update_token(self, access_token, refresh_token, access_token_expiration, refresh_token_expiration):
+    @staticmethod
+    def update_existing_or_create_new_token(user_id, access_token, refresh_token, access_token_expiration, refresh_token_expiration):
+        User.query.get(int(user_id))
+
+        token = Token.query.filter_by()
+
+
+    def update_token(self, access_token, access_token_expiration):
         if access_token:
             self.access_token = access_token
-        if refresh_token:
-            self.refresh_token = refresh_token
         if access_token_expiration:
             self.access_token_expiration = access_token_expiration
-        if refresh_token_expiration:
-            self.refresh_token_expiration = refresh_token_expiration
+
