@@ -1,14 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session
-# from flask import Flask, abort, request, jsonify, g, url_for, redirect, render_template, flash
-
 import datetime
 from flask_login import login_required, current_user
 from project import app
 from requests import post, get
 from requests.auth import HTTPBasicAuth
-from project.models import User, Token
 from project import db
-
 
 def get_energy_accounts(unique_id):
     access_token = get_access_token()

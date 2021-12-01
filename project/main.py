@@ -21,6 +21,7 @@ BASE_64_ENCODED_STRING = 'NTAwOGQwNmEtNGU0NC0xMWVjLWFjZTMtYWNkZTQ4MDAxMTIyOmM1Nj
 def index():
     token = current_user.token
 
+    # Redirect the user to the authorization screen if we don't have a token for them or our refresh_token is expired
     if not token or not token.refresh_token_expiration or datetime.datetime.now() > token.refresh_token_expiration:
         return redirect(url_for('main.authorize_user'))
 
@@ -57,7 +58,7 @@ def authorize_user():
     return render_template('connect_utility.html', redirect_url=redirect_url)
 
 
-@main.route('/pelm/authorize')
+@main.route('/user/authorize', methods=['POST'])
 def authorize_user_post():
     url = "{url}?client_id={client_id}".format(
         url="{host}/users/authorize".format(host=app.config.get('PELM_API_URL')),

@@ -3,30 +3,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>View data</h1>
-    <p>pelm_user_id: {{ pelm_user_id }}</p>
-    <p>unique_account_ids: {{ unique_account_ids }}</p>
-    <p>unique_account_id: {{ unique_account_ids[0] }}</p>
-    <p>Input the start and end date.</p>
-    <form action="/data" method="GET">
-        {#       TODO: actually select unique_account_id rather than index 0#}
-        <input name="unique_account_id" type="hidden" value="{{ unique_account_ids[0] }}">
-        <input name="start_date" placeholder="Start date">
-        <input name="end_date" placeholder="End date">
-        <!-- <div>
-          <label for="say">What greeting do you want to say?</label>
-          <input name="say" id="say" value="Hi">
-        </div>
-        <div>
-          <label for="to">Who do you want to say it to?</label>
-          <input name="to" id="to" value="Mom">
-        </div> -->
-        <div>
-            <button>Get data</button>
-        </div>
-        {% if interval_data %}
-            {{ interval_data }}
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <h1 class="title">
+          Hello {{ current_user.name }}
+        </h1>
+        <h2 class="subtitle">
+          View your energy usage data
+        </h2>
 
-        {% endif %}
-    </form>
+        <form class="form" action="/data" method="GET" style=" display: flex; flex-direction: column; align-items: flex-start;">
+            <h2 class="subtitle">
+                Select which energy account you want to view your data for.
+            </h2>
+            <select class="select" name="unique_account_id" width="300px" id="utility">
+                {% for a in unique_account_ids %}
+                    <option value="{{ a }}">{{ a }}</option>
+                {% endfor %}
+            </select>
+            <h2 class="subtitle" style="margin-top: 30px;">
+                Input start and end date.
+            </h2>
+            <div>
+                <input class="input" name="start_date" placeholder="Start date">
+                <input class="input" name="end_date" placeholder="End date">
+            </div>
+            <button class="button" style="margin-top: 30px">Get data</button>
+            {% if interval_data %}
+                <h2 class="subtitle" style="margin-top: 30px;">
+                    Energy data
+                </h2>
+                {{ interval_data }}
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
