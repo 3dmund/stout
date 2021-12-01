@@ -11,11 +11,6 @@ from project.helpers import pelm_helpers
 
 main = Blueprint('main', __name__)
 
-EMAIL = 'stout@gmail.com'
-PASSWORD = 'password'
-
-BASE_64_ENCODED_STRING = 'NTAwOGQwNmEtNGU0NC0xMWVjLWFjZTMtYWNkZTQ4MDAxMTIyOmM1NjFjZjQ4MWY2YzU5MjRlMzA2NjU3NjkyODQ4ODEyNWEyMTgwZDhhNmNlMDhhMTI1ZTRkZTA4ZWViZDRkMzU='
-
 @main.route('/')
 @login_required
 def index():
