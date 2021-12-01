@@ -10,13 +10,10 @@ class Config(object):
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
     CSRF_ENABLED = True
-    PGE_API_URL = "https://api.pge.com"
-    PGE_SHAREMYDATA_API_URL = "https://sharemydata.pge.com"
     PELM_API_URL = "https://api.portertech.io"
     STOUT_URL = "https://pelm-stout.herokuapp.com"
-    PORTER_AUTH_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzY3NDkwOTcsImlhdCI6MTYzNjY2MjY5Nywic3ViIjo5fQ.XYb1Wzw81a9BTKOrDkV3UAM97giTQmznHzToCaKaug8"
-    PELM_CLIENT_ID = "28cb423e-5151-11ec-b73c-2a8cf170e843"
-    PELM_CLIENT_SECRET = "63889f30dbc0bac568135f7b301051bf00e1ac2f2ea9dc75a23c4ebd1cf4e710"
+    PELM_CLIENT_ID = os.environ['PELM_CLIENT_ID']
+    PELM_CLIENT_SECRET = os.environ['PELM_CLIENT_SECRET']
 
 class ProductionConfig(Config):
     pass
@@ -25,13 +22,8 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    PGE_API_URL = "http://0.0.0.0/pge"
-    PGE_SHAREMYDATA_API_URL = "https://sharemydata.pge.com"
     PELM_API_URL = "http://0.0.0.0:5000"
     STOUT_URL = "http://0.0.0.0:100"
-    PORTER_AUTH_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Mzc0MjcyMDgsImlhdCI6MTYzNzM0MDgwOCwic3ViIjoxMH0.glHctUmKAVDf3siZAcNKmpZ0WoKPpskIpa8CT93gEO4"
-    PELM_CLIENT_ID = "5008d06a-4e44-11ec-ace3-acde48001122"
-    PELM_CLIENT_SECRET = "c561cf481f6c5924e3066576928488125a2180d8a6ce08a125e4de08eebd4d35"
 
 class TestingConfig(Config):
     TESTING = True
