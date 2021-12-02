@@ -89,5 +89,5 @@ def refresh_access_token():
     print(f"data: {data}")
 
     token.update_token(access_token=data['access_token'],
-                       access_token_expiration=data['access_token_expiration'])
+                       access_token_expiration=datetime.datetime.now() + datetime.timedelta(seconds=data['access_token_expires_in']))
     db.session.commit()
