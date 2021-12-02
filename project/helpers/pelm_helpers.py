@@ -80,7 +80,6 @@ def refresh_access_token():
     print("refreshing token with the following:")
     print(f"token: {token}")
     print(f"url: {pelm_token_url}")
-    print(f"headers: {headers}")
     response = post(pelm_token_url, data=data, auth=auth)
     print(f"response: {response}")
     data = response.json()
