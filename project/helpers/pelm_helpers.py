@@ -44,7 +44,7 @@ def exchange_authorization_code_for_access_token(code):
     data = {
         'grant_type': 'code',
         'code': code,
-        'redirect_url': '{}/redirect'.format(app.config.get('STOUT_URL'))
+        'redirect_uri': '{}/redirect'.format(app.config.get('STOUT_URL'))
     }
     auth = HTTPBasicAuth(app.config.get('PELM_CLIENT_ID'), app.config.get('PELM_CLIENT_SECRET'))
 
@@ -74,16 +74,14 @@ def refresh_access_token():
     )
     data = {
         'grant_type': 'refresh_token',
-        'redirect_url': '{}/redirect'.format(app.config.get('STOUT_URL'))
+        'refresh_token': token.refresh_token
     }
-    headers = {
-        'Authorization': f'Basic {token.refresh_token}'
-    }
+    auth = HTTPBasicAuth(app.config.get('PELM_CLIENT_ID'), app.config.get('PELM_CLIENT_SECRET'))
     print("refreshing token with the following:")
     print(f"token: {token}")
     print(f"url: {pelm_token_url}")
     print(f"headers: {headers}")
-    response = post(pelm_token_url, data=data, headers=headers)
+    response = post(pelm_token_url, data=data, auth=auth)
     print(f"response: {response}")
     data = response.json()
     print(f"data: {data}")
