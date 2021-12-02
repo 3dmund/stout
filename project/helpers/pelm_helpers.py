@@ -85,7 +85,8 @@ def refresh_access_token():
     print(f"headers: {headers}")
     response = post(pelm_token_url, data=data, headers=headers)
     print(f"response: {response}")
-    data = response.json()['data']
+    data = response.json()
+    print(f"data: {data}")
 
     token.update_token(access_token=data['access_token'],
                        access_token_expiration=data['access_token_expiration'])
