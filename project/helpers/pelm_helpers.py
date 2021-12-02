@@ -79,7 +79,12 @@ def refresh_access_token():
     headers = {
         'Authorization': f'Basic {token.refresh_token}'
     }
+    print("refreshing token with the following:")
+    print(f"token: {token}")
+    print(f"url: {pelm_token_url}")
+    print(f"headers: {headers}")
     response = post(pelm_token_url, data=data, headers=headers)
+    print(f"response: {response}")
     data = response.json()['data']
 
     token.update_token(access_token=data['access_token'],
